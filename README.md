@@ -1,4 +1,4 @@
-# documentdb
+# Azure DocumentDB, Hello world from C# (6.0)
 This is a repository with sample code and helpers to use Microsoft Azure DocumentDb from C#.
 
 The code contains a very simple console application to make request to Azure DocumentDB.
