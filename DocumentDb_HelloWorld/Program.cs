@@ -25,7 +25,7 @@ namespace DocumentDb_HelloWorld
 
                     // Delete all
                     Console.WriteLine("\n> Delete all:");
-                    foreach (Item item in context.ShoppingList.Documents)
+                    foreach (Item item in context.ShoppingList.AllDocuments)
                     {
                         Console.WriteLine($"\nDelete: {item.Id}");
                         Console.WriteLine(item);

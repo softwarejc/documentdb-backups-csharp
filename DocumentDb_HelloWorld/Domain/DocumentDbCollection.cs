@@ -30,7 +30,7 @@ namespace DocumentDb_HelloWorld.Domain
 
         #region IRepository
 
-        public IEnumerable<T> Documents => Where(d => true);
+        public IEnumerable<T> AllDocuments => Where(d => true);
 
         public async Task<T> CreateAsync(T item)
         {
@@ -43,14 +43,6 @@ namespace DocumentDb_HelloWorld.Domain
                                 .Where(d => d.Id == id)
                                 .AsEnumerable()
                                 .SingleOrDefault();
-        }
-
-        public T Get(Expression<Func<T, bool>> predicate)
-        {
-            return Client?.CreateDocumentQuery<T>(Collection.DocumentsLink)
-                        .Where(predicate)
-                        .AsEnumerable()
-                        .SingleOrDefault();
         }
 
         public IEnumerable<T> Where(Expression<Func<T, bool>> predicate)
@@ -66,14 +58,6 @@ namespace DocumentDb_HelloWorld.Domain
             if (doc == null) throw new InvalidOperationException("Item not found");
 
             return await Client?.ReplaceDocumentAsync(doc.SelfLink, item) as T;
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            T doc = Get(id);
-            if (doc == null) throw new InvalidOperationException("Item not found");
-
-            await DeleteAsync(doc);
         }
 
         public async Task DeleteAsync(T item)
