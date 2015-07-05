@@ -1,6 +1,6 @@
 # Azure DocumentDB and C# (6.0)
 
-This is a repository with sample code and helpers to use Microsoft Azure DocumentDb from C#.
+Azure DocumentDB, or shortly DocumentDB, is a NoSQL document database service offered by Microsoft. This is a repository with sample code and helpers to it with .NET C# 6.0.
 
 The code contains a very simple console application to make request to Azure DocumentDB.
 
