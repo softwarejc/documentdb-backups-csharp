@@ -1,0 +1,146 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using Microsoft.Azure.Documents;
+using Microsoft.Azure.Documents.Client;
+using Microsoft.Azure.Documents.Linq;
+
+namespace DocumentDb_HelloWorld.Domain
+{
+    /// <summary>
+    /// An implementation of IDocumentDbCollection using C# 6.0
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class DocumentDbCollection<T> : IDocumentDbCollection<T>
+        where T : Document
+    {
+        /// <summary>
+        /// Creates a documentDb repository to perform documents operations against one collection.
+        /// </summary>
+        /// <param name="databaseId">Database id</param>
+        /// <param name="collectionId">Collection id</param>
+        public DocumentDbCollection(string databaseId, string collectionId)
+        {
+            _databaseId = databaseId;
+            _collectionId = collectionId;
+        }
+
+        #region IRepository
+
+        public IEnumerable<T> Documents => Where(d => true);
+
+        public async Task<T> CreateAsync(T item)
+        {
+            return await Client?.CreateDocumentAsync(Collection.SelfLink, item) as T;
+        }
+
+        public T Get(string id)
+        {
+            return Client?.CreateDocumentQuery<T>(Collection.DocumentsLink)
+                                .Where(d => d.Id == id)
+                                .AsEnumerable()
+                                .SingleOrDefault();
+        }
+
+        public T Get(Expression<Func<T, bool>> predicate)
+        {
+            return Client?.CreateDocumentQuery<T>(Collection.DocumentsLink)
+                        .Where(predicate)
+                        .AsEnumerable()
+                        .SingleOrDefault();
+        }
+
+        public IEnumerable<T> Where(Expression<Func<T, bool>> predicate)
+        {
+            return Client?.CreateDocumentQuery<T>(Collection.DocumentsLink)
+                        .Where(predicate)
+                        .AsEnumerable();
+        }
+
+        public async Task<T> ReplaceAsync(string id, T item)
+        {
+            T doc = Get(id);
+            if (doc == null) throw new InvalidOperationException("Item not found");
+
+            return await Client?.ReplaceDocumentAsync(doc.SelfLink, item) as T;
+        }
+
+        public async Task DeleteAsync(string id)
+        {
+            T doc = Get(id);
+            if (doc == null) throw new InvalidOperationException("Item not found");
+
+            await DeleteAsync(doc);
+        }
+
+        public async Task DeleteAsync(T item)
+        {
+            if (item == null) throw new ArgumentNullException(nameof(item));
+
+            await Client?.DeleteDocumentAsync(item.SelfLink);
+        }
+
+        #endregion
+
+        #region privates
+
+        private readonly string _databaseId;
+        private readonly string _collectionId;
+
+        private Database _database;
+        private DocumentCollection _documentCollection;
+
+        private Database Database
+        {
+            get
+            {
+                return _database ?? (_database = ReadOrCreateDatabase(_databaseId).Result);
+            }
+        }
+        private DocumentCollection Collection
+        {
+            get
+            {
+                return _documentCollection ?? (_documentCollection = ReadOrCreateCollection(_databaseId, _collectionId).Result);
+            }
+        }
+        private DocumentClient Client { get; } = GetAzureClient();
+
+        private static DocumentClient GetAzureClient()
+        {
+            var endpoint = new Uri(ConfigurationManager.AppSettings["endPointUrl"]);
+            var authKey = ConfigurationManager.AppSettings["authorizationKey"];
+            return new DocumentClient(endpoint, authKey);
+        }
+
+        private async Task<DocumentCollection> ReadOrCreateCollection(string databaseLink, string collectionId)
+        {
+            var col = Client.CreateDocumentCollectionQuery(Database.SelfLink)
+                              .Where(c => c.Id == collectionId)
+                              .AsEnumerable()
+                              .FirstOrDefault();
+
+            return col ?? (col = await Client.CreateDocumentCollectionAsync(databaseLink, new DocumentCollection { Id = collectionId }));
+        }
+
+        private async Task<Database> ReadOrCreateDatabase(string databaseId)
+        {
+            var db = Client.CreateDatabaseQuery()
+                            .Where(d => d.Id == databaseId)
+                            .AsEnumerable()
+                            .FirstOrDefault();
+
+            return db ?? (db = await Client.CreateDatabaseAsync(new Database { Id = databaseId }));
+        }
+
+        void IDisposable.Dispose()
+        {
+            Client?.Dispose();
+        }
+
+        #endregion
+    }
+}
