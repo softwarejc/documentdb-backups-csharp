@@ -17,6 +17,12 @@ namespace DocumentDb_HelloWorld.Domain
     public class DocumentDbCollection<T> : IDocumentDbCollection<T>
         where T : Document
     {
+        private readonly string _databaseId;
+        private readonly string _collectionId;
+
+        private Database _database;
+        private DocumentCollection _documentCollection;
+
         /// <summary>
         /// Creates a documentDb repository to perform documents operations against one collection.
         /// </summary>
@@ -71,26 +77,10 @@ namespace DocumentDb_HelloWorld.Domain
 
         #region privates
 
-        private readonly string _databaseId;
-        private readonly string _collectionId;
+        private Database Database => _database ?? (_database = ReadOrCreateDatabase(_databaseId).Result);
 
-        private Database _database;
-        private DocumentCollection _documentCollection;
+        private DocumentCollection Collection => _documentCollection ?? (_documentCollection = ReadOrCreateCollection(_databaseId, _collectionId).Result);
 
-        private Database Database
-        {
-            get
-            {
-                return _database ?? (_database = ReadOrCreateDatabase(_databaseId).Result);
-            }
-        }
-        private DocumentCollection Collection
-        {
-            get
-            {
-                return _documentCollection ?? (_documentCollection = ReadOrCreateCollection(_databaseId, _collectionId).Result);
-            }
-        }
         private DocumentClient Client { get; } = GetAzureClient();
 
         private static DocumentClient GetAzureClient()

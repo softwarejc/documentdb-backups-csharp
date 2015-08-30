@@ -6,7 +6,7 @@ namespace DocumentDb_HelloWorld.Domain
     public class Item : Document
     {
         [JsonProperty(PropertyName = "type")]
-        public string Type { get { return "item"; } }
+        public string Type => "item";
 
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }

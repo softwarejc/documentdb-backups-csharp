@@ -24,14 +24,14 @@ namespace DocumentDb_HelloWorld
                     }
 
                     // Delete all
-                    Console.WriteLine("\n> Delete all:");
-                    foreach (Item item in context.ShoppingList.AllDocuments)
-                    {
-                        Console.WriteLine($"\nDelete: {item.Id}");
-                        Console.WriteLine(item);
+                    //Console.WriteLine("\n> Delete all:");
+                    //foreach (Item item in context.ShoppingList.AllDocuments)
+                    //{
+                    //    Console.WriteLine($"\nDelete: {item.Id}");
+                    //    Console.WriteLine(item);
 
-                        context.ShoppingList.DeleteAsync(item).Wait();
-                    }
+                    //    context.ShoppingList.DeleteAsync(item).Wait();
+                    //}
                 }
             }
             catch (Exception e)
@@ -40,7 +40,7 @@ namespace DocumentDb_HelloWorld
             }
             finally
             {
-                Console.WriteLine("\n\n\nPress <ENTER> to close the app.");
+                Console.WriteLine("\nPress <ENTER> to close the app.");
                 Console.ReadLine();
             }
         }
