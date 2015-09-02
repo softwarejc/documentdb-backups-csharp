@@ -11,10 +11,10 @@ namespace DocumentDb_HelloWorld
             {
                 using (var context = new MyFoodContext())
                 {
-                    // Create some items
-                    context.ShoppingList.CreateAsync(new Item { Name = "Milk", Description = "Skimmed milk" }).Wait();
-                    context.ShoppingList.CreateAsync(new Item { Name = "Milk", Description = "Whole milk" }).Wait();
-                    context.ShoppingList.CreateAsync(new Item { Name = "Water", Description = "Mineral" }).Wait();
+                    //// Create some items
+                    //context.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Skimmed milk" }).Wait();
+                    //context.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Whole milk" }).Wait();
+                    //context.ShoppingList.CreateDocument(new Item { Name = "Water", Description = "Mineral" }).Wait();
 
                     // Find all items with name = milk
                     Console.WriteLine("> Find 'Milk':");
@@ -30,7 +30,7 @@ namespace DocumentDb_HelloWorld
                     //    Console.WriteLine($"\nDelete: {item.Id}");
                     //    Console.WriteLine(item);
 
-                    //    context.ShoppingList.DeleteAsync(item).Wait();
+                    //    context.ShoppingList.DeleteDocument(item).Wait();
                     //}
                 }
             }

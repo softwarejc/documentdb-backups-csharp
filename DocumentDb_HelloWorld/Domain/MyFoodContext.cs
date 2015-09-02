@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using DocumentDb_HelloWorld.Common;
 
 namespace DocumentDb_HelloWorld.Domain
 {

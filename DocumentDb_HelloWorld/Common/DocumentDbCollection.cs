@@ -8,7 +8,7 @@ using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 
-namespace DocumentDb_HelloWorld.Domain
+namespace DocumentDb_HelloWorld.Common
 {
     /// <summary>
     /// An implementation of IDocumentDbCollection using C# 6.0
@@ -32,18 +32,23 @@ namespace DocumentDb_HelloWorld.Domain
         {
             _databaseId = databaseId;
             _collectionId = collectionId;
+
+            // Create document db client
+            var endpoint = new Uri(ConfigurationManager.AppSettings["endPointUrl"]);
+            var authKey = ConfigurationManager.AppSettings["authorizationKey"];
+            Client = new DocumentClient(endpoint, authKey);
         }
 
         #region IRepository
 
         public IEnumerable<T> AllDocuments => Where(d => true);
 
-        public async Task<T> CreateAsync(T item)
+        public async Task<T> CreateDocument(T item)
         {
             return await Client?.CreateDocumentAsync(Collection.SelfLink, item) as T;
         }
 
-        public T Get(string id)
+        public T GetDocument(string id)
         {
             return Client?.CreateDocumentQuery<T>(Collection.DocumentsLink)
                                 .Where(d => d.Id == id)
@@ -58,15 +63,15 @@ namespace DocumentDb_HelloWorld.Domain
                         .AsEnumerable();
         }
 
-        public async Task<T> ReplaceAsync(string id, T item)
+        public async Task<T> ReplaceDocument(string id, T item)
         {
-            T doc = Get(id);
+            T doc = GetDocument(id);
             if (doc == null) throw new InvalidOperationException("Item not found");
 
             return await Client?.ReplaceDocumentAsync(doc.SelfLink, item) as T;
         }
 
-        public async Task DeleteAsync(T item)
+        public async Task DeleteDocument(T item)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
 
@@ -81,14 +86,7 @@ namespace DocumentDb_HelloWorld.Domain
 
         private DocumentCollection Collection => _documentCollection ?? (_documentCollection = ReadOrCreateCollection(_databaseId, _collectionId).Result);
 
-        private DocumentClient Client { get; } = GetAzureClient();
-
-        private static DocumentClient GetAzureClient()
-        {
-            var endpoint = new Uri(ConfigurationManager.AppSettings["endPointUrl"]);
-            var authKey = ConfigurationManager.AppSettings["authorizationKey"];
-            return new DocumentClient(endpoint, authKey);
-        }
+        private DocumentClient Client { get; }
 
         private async Task<DocumentCollection> ReadOrCreateCollection(string databaseLink, string collectionId)
         {
