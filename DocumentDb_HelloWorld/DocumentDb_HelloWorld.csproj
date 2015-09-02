@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\DocumentDbUserHelper.cs" />
     <Compile Include="Common\IDocumentDbCollection.cs" />
     <Compile Include="Common\DocumentDbCollection.cs" />
     <Compile Include="Domain\MyFoodContext.cs" />
