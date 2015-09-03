@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
@@ -12,6 +9,16 @@ namespace DocumentDb_HelloWorld.Common
 {
     public class DocumentDbUserHelper
     {
+        /// <summary>
+        /// Gets a user by id
+        /// </summary>
+        public User GetUser(DocumentClient client, Database database, string userId)
+        {
+            return client.CreateUserQuery("dbs/" + database.ResourceId + "/users/")
+                    .AsEnumerable()
+                    .FirstOrDefault(u => u.Id == userId);
+        }
+
         /// <summary>
         /// Creates a new user
         /// </summary>
@@ -53,21 +60,11 @@ namespace DocumentDb_HelloWorld.Common
         }
 
         /// <summary>
-        /// Creates a document db client using the specified permission
+        /// Creates a document db client using the specified permission token
         /// </summary>
         public DocumentClient CreateClient(Uri endPoint, Permission permission)
         {
             return new DocumentClient(endPoint, permission.Token);
-        }
-
-        /// <summary>
-        /// Gets a user by id
-        /// </summary>
-        public User GetUser(DocumentClient client, Database database, string userId)
-        {
-            return client.CreateUserQuery("dbs/" + database.ResourceId + "/users/")
-                    .AsEnumerable()
-                    .FirstOrDefault(u => u.Id == userId);
         }
     }
 }
