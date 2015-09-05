@@ -1,7 +1,7 @@
 using System;
+using System.Threading.Tasks;
 
 using DocumentDB.Framework.Interfaces;
-using DocumentDB.Framework.Services;
 
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
@@ -23,13 +23,7 @@ namespace DocumentDB.Framework
             _client = new DocumentClient(endPointUrl, authorizationKey);
 
             DatabaseService = new DatabaseService(_client, databaseId);
-            UsersService = new UsersService(_client, DatabaseService.Database);
         }
-
-        /// <summary>
-        ///     Gets the users service.
-        /// </summary>
-        public IUsersService UsersService { get; }
 
         /// <summary>
         ///     Gets the database service.
@@ -50,9 +44,10 @@ namespace DocumentDB.Framework
         /// <typeparam name="T"></typeparam>
         /// <param name="collectionId">The collection identifier.</param>
         /// <returns></returns>
-        protected IDocumentDBCollection<T> Collection<T>(string collectionId) where T : Document
+        protected async Task<IDocumentDBCollection<T>> DocumentDBCollection<T>(string collectionId) where T : Document
         {
-            return new DocumentDBCollection<T>(_client, DatabaseService.Database.SelfLink, collectionId);
+            var collection = await DatabaseService.ReadOrCreateCollection(collectionId);
+            return new DocumentDBCollection<T>(_client, collection);
         }
     }
 }

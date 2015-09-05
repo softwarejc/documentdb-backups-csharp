@@ -21,9 +21,8 @@ namespace DocumentDB.Framework
         ///     Creates a documentDb repository to perform documents operations against one collection.
         /// </summary>
         /// <param name="client">Document db client</param>
-        /// <param name="databaseLink">Link to the database that contains the collection</param>
-        /// <param name="collectionId">Collection id</param>
-        public DocumentDBCollection(DocumentClient client, string databaseLink, string collectionId)
+        /// <param name="collection">The collection.</param>
+        public DocumentDBCollection(DocumentClient client, DocumentCollection collection)
         {
             if (client == null)
             {
@@ -32,7 +31,7 @@ namespace DocumentDB.Framework
 
             _client = client;
 
-            Collection = ReadOrCreateCollection(databaseLink, collectionId).Result;
+            Collection = collection;
         }
 
         /// <summary>
@@ -105,24 +104,6 @@ namespace DocumentDB.Framework
             }
 
             await _client?.DeleteDocumentAsync(documentLink);
-        }
-
-        private async Task<DocumentCollection> ReadOrCreateCollection(string databaseLink, string collectionId)
-        {
-            var collection =
-                _client.CreateDocumentCollectionQuery(databaseLink)
-                    .Where(c => c.Id.Equals(collectionId))
-                    .AsEnumerable()
-                    .FirstOrDefault();
-
-            if (collection == null)
-            {
-                // Collection not found, create it
-                collection =
-                    await
-                    _client.CreateDocumentCollectionAsync(databaseLink, new DocumentCollection { Id = collectionId });
-            }
-            return collection;
         }
     }
 }

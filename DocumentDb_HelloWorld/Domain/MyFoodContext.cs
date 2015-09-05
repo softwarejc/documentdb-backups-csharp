@@ -14,7 +14,7 @@ namespace DocumentDb_HelloWorld.Domain
                 ConfigurationManager.AppSettings["authorizationKey"],
                 ConfigurationManager.AppSettings["database"])
         {
-            ShoppingList = Collection<Item>("ShoppingListCollection");
+            ShoppingList = DocumentDBCollection<Item>("ShoppingListCollection").Result;
         }
 
         public IDocumentDBCollection<Item> ShoppingList { get; }

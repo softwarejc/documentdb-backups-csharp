@@ -50,13 +50,11 @@
   <ItemGroup>
     <Compile Include="DocumentDBCollection.cs" />
     <Compile Include="DocumentDBContext.cs" />
-    <Compile Include="Interfaces\IUsersService.cs" />
-    <Compile Include="Services\DatabaseService.cs" />
-    <Compile Include="Services\UsersService.cs" />
+    <Compile Include="DatabaseService.cs" />
     <Compile Include="Helpers\EpochDateTimeEx.cs" />
+    <Compile Include="Interfaces\IDatabaseService.cs" />
     <Compile Include="Interfaces\IDocumentDBCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Interfaces\IDatabaseService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -10,7 +10,6 @@ namespace DocumentDb_HelloWorld
         {
             try
             {
-                // client to access the database
                 using (var context = new MyFoodContext())
                 {
                     Console.WriteLine("Create some documents:");
@@ -41,7 +40,7 @@ namespace DocumentDb_HelloWorld
                     }
 
                     // Delete database
-                    context.DatabaseService.Delete().Wait();
+                    context.DatabaseService.DeleteDatabase().Wait();
                 }
             }
             catch (Exception e)
