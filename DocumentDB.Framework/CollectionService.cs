@@ -12,7 +12,7 @@ using Microsoft.Azure.Documents.Linq;
 
 namespace DocumentDB.Framework
 {
-    internal class DocumentDBCollection<T> : IDocumentDBCollection<T>
+    internal class CollectionService<T> : ICollectionService<T>
         where T : Document
     {
         private readonly DocumentClient _client;
@@ -22,7 +22,7 @@ namespace DocumentDB.Framework
         /// </summary>
         /// <param name="client">Document db client</param>
         /// <param name="collection">The collection.</param>
-        public DocumentDBCollection(DocumentClient client, DocumentCollection collection)
+        public CollectionService(DocumentClient client, DocumentCollection collection)
         {
             if (client == null)
             {

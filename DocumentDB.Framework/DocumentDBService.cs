@@ -8,19 +8,19 @@ using Microsoft.Azure.Documents.Client;
 
 namespace DocumentDB.Framework
 {
-    public class DocumentDBContext : IDisposable
+    public class DocumentDBService : IDisposable
     {
         private readonly DocumentClient _client;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="DocumentDBContext" /> class.
+        ///     Initializes a new instance of the <see cref="DocumentDBService" /> class.
         /// </summary>
         /// <param name="endPointUrl">The end point URL.</param>
         /// <param name="authorizationKey">The authorization key.</param>
         /// <param name="databaseId">The database Id.</param>
-        protected DocumentDBContext(Uri endPointUrl, string authorizationKey, string databaseId)
+        protected DocumentDBService(string endPointUrl, string authorizationKey, string databaseId)
         {
-            _client = new DocumentClient(endPointUrl, authorizationKey);
+            _client = new DocumentClient(new Uri(endPointUrl), authorizationKey);
 
             DatabaseService = new DatabaseService(_client, databaseId);
         }
@@ -44,10 +44,10 @@ namespace DocumentDB.Framework
         /// <typeparam name="T"></typeparam>
         /// <param name="collectionId">The collection identifier.</param>
         /// <returns></returns>
-        protected async Task<IDocumentDBCollection<T>> DocumentDBCollection<T>(string collectionId) where T : Document
+        protected async Task<ICollectionService<T>> CreateCollectionService<T>(string collectionId) where T : Document
         {
             var collection = await DatabaseService.ReadOrCreateCollection(collectionId);
-            return new DocumentDBCollection<T>(_client, collection);
+            return new CollectionService<T>(_client, collection);
         }
     }
 }

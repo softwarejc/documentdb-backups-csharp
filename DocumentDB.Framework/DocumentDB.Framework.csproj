@@ -48,12 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DocumentDBCollection.cs" />
-    <Compile Include="DocumentDBContext.cs" />
+    <Compile Include="CollectionService.cs" />
+    <Compile Include="DocumentDBService.cs" />
     <Compile Include="DatabaseService.cs" />
     <Compile Include="Helpers\EpochDateTimeEx.cs" />
     <Compile Include="Interfaces\IDatabaseService.cs" />
-    <Compile Include="Interfaces\IDocumentDBCollection.cs" />
+    <Compile Include="Interfaces\ICollectionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

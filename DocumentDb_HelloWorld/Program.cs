@@ -10,7 +10,7 @@ namespace DocumentDb_HelloWorld
         {
             try
             {
-                using (var context = new MyFoodContext())
+                using (var context = new MyFoodService())
                 {
                     Console.WriteLine("Create some documents:");
                     Console.ReadLine();

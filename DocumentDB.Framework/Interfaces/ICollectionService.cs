@@ -7,7 +7,7 @@ using Microsoft.Azure.Documents;
 
 namespace DocumentDB.Framework.Interfaces
 {
-    public interface IDocumentDBCollection<T>
+    public interface ICollectionService<T>
         where T : Document
     {
         /// <summary>
