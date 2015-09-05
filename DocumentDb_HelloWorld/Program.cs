@@ -1,5 +1,8 @@
 ﻿using DocumentDb_HelloWorld.Domain;
 using System;
+using System.Configuration;
+using DocumentDB.Framework;
+using Microsoft.Azure.Documents.Client;
 
 namespace DocumentDb_HelloWorld
 {
@@ -9,12 +12,16 @@ namespace DocumentDb_HelloWorld
         {
             try
             {
+                // client to access the database
                 using (var context = new MyFoodContext())
                 {
-                    //// Create some items
-                    //context.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Skimmed milk" }).Wait();
-                    //context.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Whole milk" }).Wait();
-                    //context.ShoppingList.CreateDocument(new Item { Name = "Water", Description = "Mineral" }).Wait();
+                    Console.WriteLine("Create some documents:");
+                    Console.ReadLine();
+
+                    // Create some items
+                    context.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Skimmed milk" }).Wait();
+                    context.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Whole milk" }).Wait();
+                    context.ShoppingList.CreateDocument(new Item { Name = "Water", Description = "Mineral" }).Wait();
 
                     // Find all items with name = milk
                     Console.WriteLine("> Find 'Milk':");
@@ -23,15 +30,20 @@ namespace DocumentDb_HelloWorld
                         Console.WriteLine($"- {item.Name} - {item.Description}");
                     }
 
-                    // Delete all
-                    //Console.WriteLine("\n> Delete all:");
-                    //foreach (Item item in context.ShoppingList.AllDocuments)
-                    //{
-                    //    Console.WriteLine($"\nDelete: {item.Id}");
-                    //    Console.WriteLine(item);
+                    // Delete all documents
+                    Console.WriteLine("\n> Delete all:");
+                    Console.ReadLine();
 
-                    //    context.ShoppingList.DeleteDocument(item).Wait();
-                    //}
+                    foreach (Item item in context.ShoppingList.AllDocuments)
+                    {
+                        Console.WriteLine($"\nDelete: {item.Id}");
+                        Console.WriteLine(item);
+
+                        context.ShoppingList.DeleteDocument(item.SelfLink).Wait();
+                    }
+
+                    // Delete collection
+                    context.DatabaseService.Delete().Wait();
                 }
             }
             catch (Exception e)

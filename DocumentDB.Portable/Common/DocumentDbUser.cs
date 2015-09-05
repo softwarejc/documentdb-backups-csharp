@@ -5,9 +5,9 @@ using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 
-namespace DocumentDb_HelloWorld.Common
+namespace DocumentDB.Portable.Common
 {
-    public class DocumentDbUserHelper
+    public class DocumentDbUser
     {
         /// <summary>
         /// Gets a user by id

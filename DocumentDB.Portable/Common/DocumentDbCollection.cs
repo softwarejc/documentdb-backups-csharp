@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using DocumentDb_HelloWorld.Common;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 
-namespace DocumentDb_HelloWorld.Common
+namespace DocumentDB.Portable.Common
 {
     /// <summary>
     /// An implementation of IDocumentDbCollection using C# 6.0
@@ -17,7 +17,6 @@ namespace DocumentDb_HelloWorld.Common
     public class DocumentDbCollection<T> : IDocumentDbCollection<T>
         where T : Document
     {
-        private readonly Database _database;
         private readonly DocumentCollection _collection;
         private readonly DocumentClient _client;
 
@@ -34,9 +33,8 @@ namespace DocumentDb_HelloWorld.Common
                 throw new ArgumentNullException(nameof(client));
             }
 
-            _database = database;
             _client = client;
-            _collection = ReadOrCreateCollection(_database.Id, collectionId).Result;
+            _collection = ReadOrCreateCollection(database, collectionId).Result;
         }
 
         #region IRepository
@@ -80,19 +78,19 @@ namespace DocumentDb_HelloWorld.Common
 
         #endregion
 
-        private async Task<DocumentCollection> ReadOrCreateCollection(string databaseLink, string collectionId)
+        private async Task<DocumentCollection> ReadOrCreateCollection(Database database, string collectionId)
         {
-            var col = _client.CreateDocumentCollectionQuery(_database.SelfLink)
-                              .Where(c => c.Id == collectionId)
+            var collection = _client.CreateDocumentCollectionQuery(database.SelfLink)
+                              .Where(c => c.Id.Equals(collectionId))
                               .AsEnumerable()
                               .FirstOrDefault();
 
-            return col ?? (col = await _client.CreateDocumentCollectionAsync(databaseLink, new DocumentCollection { Id = collectionId }));
-        }
-
-        void IDisposable.Dispose()
-        {
-            _client?.Dispose();
+            if (collection == null)
+            {
+                // Collection not found, create it
+                collection = await _client.CreateDocumentCollectionAsync(database.SelfLink, new DocumentCollection { Id = collectionId });
+            }
+            return collection;
         }
     }
 }

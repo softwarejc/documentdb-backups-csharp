@@ -6,7 +6,7 @@ using Microsoft.Azure.Documents;
 
 namespace DocumentDb_HelloWorld.Common
 {
-    public interface IDocumentDbCollection<T> : IDisposable
+    public interface IDocumentDbCollection<T> 
         where T : Document
     {
         // Creates a new document in database

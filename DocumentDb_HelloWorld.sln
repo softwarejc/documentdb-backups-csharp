@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentDb_HelloWorld", "DocumentDb_HelloWorld\DocumentDb_HelloWorld.csproj", "{8003C08A-4C6B-4116-966B-E0720260D824}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentDB.Framework", "DocumentDB.Framework\DocumentDB.Framework.csproj", "{FD7029AF-EB3E-475C-B58C-4EDEB86FF3A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{8003C08A-4C6B-4116-966B-E0720260D824}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8003C08A-4C6B-4116-966B-E0720260D824}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8003C08A-4C6B-4116-966B-E0720260D824}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD7029AF-EB3E-475C-B58C-4EDEB86FF3A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD7029AF-EB3E-475C-B58C-4EDEB86FF3A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD7029AF-EB3E-475C-B58C-4EDEB86FF3A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD7029AF-EB3E-475C-B58C-4EDEB86FF3A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8003C08A-4C6B-4116-966B-E0720260D824}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{FD7029AF-EB3E-475C-B58C-4EDEB86FF3A6}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DocumentDb_HelloWorld</RootNamespace>
-    <AssemblyName>DocumentDb_HelloWorld</AssemblyName>
+    <RootNamespace>DocumentDB.Framework</RootNamespace>
+    <AssemblyName>DocumentDB.Framework</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -42,7 +39,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -52,22 +48,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\MyFoodContext.cs" />
-    <Compile Include="Domain\Item.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="DocumentDBCollection.cs" />
+    <Compile Include="DocumentDBContext.cs" />
+    <Compile Include="IUsersService.cs" />
+    <Compile Include="Services\DatabaseService.cs" />
+    <Compile Include="UsersService.cs" />
+    <Compile Include="Helpers\EpochDateTimeEx.cs" />
+    <Compile Include="Interfaces\IDocumentDBCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Interfaces\IDatabaseService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DocumentDB.Framework\DocumentDB.Framework.csproj">
-      <Project>{FD7029AF-EB3E-475C-B58C-4EDEB86FF3A6}</Project>
-      <Name>DocumentDB.Framework</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
