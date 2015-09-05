@@ -1,4 +1,4 @@
-# Azure DocumentDB C# (6.0) Framework
+# Azure DocumentDB - C# (6.0) library
 
 Azure DocumentDB, or shortly DocumentDB, is a NoSQL document database service offered by Microsoft. This library offers a set of classes to work with DocumentDB using .NET C# 6.0.
 
