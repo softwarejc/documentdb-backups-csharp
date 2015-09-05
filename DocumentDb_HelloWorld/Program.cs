@@ -10,19 +10,19 @@ namespace DocumentDb_HelloWorld
         {
             try
             {
-                using (var context = new MyFoodService())
+                using (var foodService = new FoodService())
                 {
                     Console.WriteLine("Create some documents:");
                     Console.ReadLine();
 
                     // Create some items
-                    context.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Skimmed milk" }).Wait();
-                    context.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Whole milk" }).Wait();
-                    context.ShoppingList.CreateDocument(new Item { Name = "Water", Description = "Mineral" }).Wait();
+                    foodService.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Skimmed milk" }).Wait();
+                    foodService.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Whole milk" }).Wait();
+                    foodService.ShoppingList.CreateDocument(new Item { Name = "Water", Description = "Mineral" }).Wait();
 
                     // Find all items with name = milk
                     Console.WriteLine("> Find 'Milk':");
-                    foreach (var item in context.ShoppingList.Where(d => d.Name.Equals("Milk")))
+                    foreach (var item in foodService.ShoppingList.Where(d => d.Name.Equals("Milk")))
                     {
                         Console.WriteLine($"- {item.Name} - {item.Description}");
                     }
@@ -31,16 +31,16 @@ namespace DocumentDb_HelloWorld
                     Console.WriteLine("\n> Delete all:");
                     Console.ReadLine();
 
-                    foreach (var item in context.ShoppingList.AllDocuments)
+                    foreach (var item in foodService.ShoppingList.AllDocuments)
                     {
                         Console.WriteLine($"\nDelete: {item.Id}");
                         Console.WriteLine(item);
 
-                        context.ShoppingList.DeleteDocument(item.SelfLink).Wait();
+                        foodService.ShoppingList.DeleteDocument(item.SelfLink).Wait();
                     }
 
                     // Delete database
-                    context.DatabaseService.DeleteDatabase().Wait();
+                    foodService.DatabaseService.DeleteDatabase().Wait();
                 }
             }
             catch (Exception e)

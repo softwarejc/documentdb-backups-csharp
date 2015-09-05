@@ -6,11 +6,11 @@ using DocumentDB.Framework.Interfaces;
 
 namespace DocumentDb_HelloWorld.Domain
 {
-    public class MyFoodService : DocumentDBService
+    public class FoodService : DocumentDBService
     {
         private const string ShoppingListCollectionId = "ShoppingListCollection";
 
-        public MyFoodService()
+        public FoodService()
             : base(
                 ConfigurationManager.AppSettings["endPointUrl"],
                 ConfigurationManager.AppSettings["authorizationKey"],
