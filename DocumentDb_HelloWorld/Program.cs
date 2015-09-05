@@ -1,14 +1,12 @@
-﻿using DocumentDb_HelloWorld.Domain;
-using System;
-using System.Configuration;
-using DocumentDB.Framework;
-using Microsoft.Azure.Documents.Client;
+﻿using System;
+
+using DocumentDb_HelloWorld.Domain;
 
 namespace DocumentDb_HelloWorld
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             try
             {
@@ -25,7 +23,7 @@ namespace DocumentDb_HelloWorld
 
                     // Find all items with name = milk
                     Console.WriteLine("> Find 'Milk':");
-                    foreach (Item item in context.ShoppingList.Where(d => d.Name.Equals("Milk")))
+                    foreach (var item in context.ShoppingList.Where(d => d.Name.Equals("Milk")))
                     {
                         Console.WriteLine($"- {item.Name} - {item.Description}");
                     }
@@ -34,7 +32,7 @@ namespace DocumentDb_HelloWorld
                     Console.WriteLine("\n> Delete all:");
                     Console.ReadLine();
 
-                    foreach (Item item in context.ShoppingList.AllDocuments)
+                    foreach (var item in context.ShoppingList.AllDocuments)
                     {
                         Console.WriteLine($"\nDelete: {item.Id}");
                         Console.WriteLine(item);
@@ -42,7 +40,7 @@ namespace DocumentDb_HelloWorld
                         context.ShoppingList.DeleteDocument(item.SelfLink).Wait();
                     }
 
-                    // Delete collection
+                    // Delete database
                     context.DatabaseService.Delete().Wait();
                 }
             }

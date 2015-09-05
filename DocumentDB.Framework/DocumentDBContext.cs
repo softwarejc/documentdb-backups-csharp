@@ -1,6 +1,8 @@
 using System;
+
 using DocumentDB.Framework.Interfaces;
 using DocumentDB.Framework.Services;
+
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 
@@ -11,7 +13,7 @@ namespace DocumentDB.Framework
         private readonly DocumentClient _client;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DocumentDBContext"/> class.
+        ///     Initializes a new instance of the <see cref="DocumentDBContext" /> class.
         /// </summary>
         /// <param name="endPointUrl">The end point URL.</param>
         /// <param name="authorizationKey">The authorization key.</param>
@@ -25,33 +27,32 @@ namespace DocumentDB.Framework
         }
 
         /// <summary>
-        /// Gets the database service.
-        /// </summary>
-        public IDatabaseService DatabaseService { get; }
-
-        /// <summary>
-        /// Gets the users service.
+        ///     Gets the users service.
         /// </summary>
         public IUsersService UsersService { get; }
 
         /// <summary>
-        /// Reads the or create collection.
+        ///     Gets the database service.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="collectionId">The collection identifier.</param>
-        /// <returns></returns>
-        protected IDocumentDBCollection<T> Collection<T>(string collectionId)
-          where T : Document
-        {
-            return new DocumentDBCollection<T>(_client, DatabaseService.Database.SelfLink, collectionId);
-        }
+        public IDatabaseService DatabaseService { get; }
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public virtual void Dispose()
         {
             _client.Dispose();
+        }
+
+        /// <summary>
+        ///     Reads the or create collection.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collectionId">The collection identifier.</param>
+        /// <returns></returns>
+        protected IDocumentDBCollection<T> Collection<T>(string collectionId) where T : Document
+        {
+            return new DocumentDBCollection<T>(_client, DatabaseService.Database.SelfLink, collectionId);
         }
     }
 }

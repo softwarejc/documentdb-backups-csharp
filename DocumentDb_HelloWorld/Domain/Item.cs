@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Documents;
+
 using Newtonsoft.Json;
 
 namespace DocumentDb_HelloWorld.Domain

@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+
 using DocumentDB.Framework.Interfaces;
+
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 
-namespace DocumentDB.Framework
+namespace DocumentDB.Framework.Services
 {
     public class UsersService : IUsersService
     {
         private readonly DocumentClient _client;
+
         private readonly Database _database;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UsersService"/> class.
+        ///     Initializes a new instance of the <see cref="UsersService" /> class.
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="database">The database.</param>
@@ -35,11 +38,12 @@ namespace DocumentDB.Framework
         }
 
         /// <summary>
-        /// Creates a new user
+        ///     Creates a new user
         /// </summary>
         public async Task<User> ReadOrCreateUser(string userId)
         {
-            var user = _client.CreateUserQuery("dbs/" + _database.ResourceId + "/users/")
+            var user =
+                _client.CreateUserQuery("dbs/" + _database.ResourceId + "/users/")
                     .AsEnumerable()
                     .FirstOrDefault(u => u.Id == userId);
 
@@ -53,26 +57,31 @@ namespace DocumentDB.Framework
         }
 
         /// <summary>
-        /// Creates a permission with an access token for the specified user and the speciefied collection
+        ///     Creates a permission with an access token for the specified user and the speciefied collection
         /// </summary>
-        public async Task<Permission> CreateUserPermission(User user, DocumentCollection collection, PermissionMode permission)
+        public async Task<Permission> CreateUserPermission(
+            User user,
+            DocumentCollection collection,
+            PermissionMode permission)
         {
-            string permissionId = permission + collection.Id;
+            var permissionId = permission + collection.Id;
 
             // The permission may already exists on database, try to find it
-            Permission collectionPermission = _client.
-                CreatePermissionQuery("/dbs/" + _database.ResourceId + "/users/" + user.ResourceId + "/permissions").
-                AsEnumerable().FirstOrDefault(u => u.Id == permissionId);
+            var collectionPermission =
+                _client.CreatePermissionQuery(
+                    "/dbs/" + _database.ResourceId + "/users/" + user.ResourceId + "/permissions")
+                    .AsEnumerable()
+                    .FirstOrDefault(u => u.Id == permissionId);
 
             // If permission not found, create a new one
             if (collectionPermission == null)
             {
                 collectionPermission = new Permission
-                {
-                    PermissionMode = permission,
-                    ResourceLink = collection.SelfLink,
-                    Id = permissionId
-                };
+                                           {
+                                               PermissionMode = permission,
+                                               ResourceLink = collection.SelfLink,
+                                               Id = permissionId
+                                           };
             }
 
             return await _client.CreatePermissionAsync(user.SelfLink, collectionPermission);

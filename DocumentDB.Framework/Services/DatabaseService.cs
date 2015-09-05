@@ -1,6 +1,8 @@
 using System.Linq;
 using System.Threading.Tasks;
+
 using DocumentDB.Framework.Interfaces;
+
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
@@ -12,7 +14,7 @@ namespace DocumentDB.Framework.Services
         private readonly DocumentClient _client;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DatabaseService"/> class.
+        ///     Initializes a new instance of the <see cref="DatabaseService" /> class.
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="databaseId">The database identifier.</param>
@@ -23,12 +25,12 @@ namespace DocumentDB.Framework.Services
         }
 
         /// <summary>
-        /// Gets the database associated to this service.
+        ///     Gets the database associated to this service.
         /// </summary>
         public Database Database { get; }
 
         /// <summary>
-        /// Deletes the service database.
+        ///     Deletes the service database.
         /// </summary>
         /// <returns></returns>
         public async Task Delete()
@@ -37,16 +39,13 @@ namespace DocumentDB.Framework.Services
         }
 
         /// <summary>
-        /// Reads or create a database.
+        ///     Reads or create a database.
         /// </summary>
         /// <param name="databaseId">The database identifier.</param>
         private async Task<Database> ReadOrCreateDatabase(string databaseId)
         {
             // Get the database
-            var db = _client.CreateDatabaseQuery()
-                .Where(d => d.Id == databaseId)
-                .AsEnumerable()
-                .FirstOrDefault();
+            var db = _client.CreateDatabaseQuery().Where(d => d.Id == databaseId).AsEnumerable().FirstOrDefault();
 
             // Return the database or create it if not exists yet
             return db ?? await _client.CreateDatabaseAsync(new Database { Id = databaseId });
