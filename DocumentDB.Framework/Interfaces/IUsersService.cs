@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 
-namespace DocumentDB.Framework
+namespace DocumentDB.Framework.Interfaces
 {
     public interface IUsersService
     {

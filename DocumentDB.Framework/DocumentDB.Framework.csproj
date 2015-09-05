@@ -50,7 +50,7 @@
   <ItemGroup>
     <Compile Include="DocumentDBCollection.cs" />
     <Compile Include="DocumentDBContext.cs" />
-    <Compile Include="IUsersService.cs" />
+    <Compile Include="Interfaces\IUsersService.cs" />
     <Compile Include="Services\DatabaseService.cs" />
     <Compile Include="UsersService.cs" />
     <Compile Include="Helpers\EpochDateTimeEx.cs" />
