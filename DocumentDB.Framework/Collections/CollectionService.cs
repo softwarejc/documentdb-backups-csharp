@@ -67,7 +67,9 @@ namespace DocumentDB.Framework.Collections
         public async Task<T> CreateDocument(T item)
         {
             var response = await Client.CreateDocumentAsync(Collection.SelfLink, item);
-            return response.Resource as T;
+
+            T result = (dynamic)response.Resource;
+            return result;
         }
 
         /// <summary>
@@ -87,9 +89,8 @@ namespace DocumentDB.Framework.Collections
         {
             var response = await Client.ReadDocumentAsync(documentLink);
 
-            T document = (dynamic)response.Resource;
-
-            return document;
+            T result = (dynamic)response.Resource;
+            return result;
         }
 
         /// <summary>
@@ -112,7 +113,9 @@ namespace DocumentDB.Framework.Collections
             }
 
             var response = await Client.ReplaceDocumentAsync(doc.SelfLink, item);
-            return response.Resource as T;
+
+            T result = (dynamic)response.Resource;
+            return result;
         }
 
         /// <summary>
