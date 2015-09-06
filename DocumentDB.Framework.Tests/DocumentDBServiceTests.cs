@@ -1,32 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using DocumentDB.Framework.Tests.Helpers;
 
-using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DocumentDB.Framework.Tests
 {
-    [TestClass()]
-    public class DocumentDBTestsBase
+    [TestClass]
+    public class DocumentDBServiceTests : DocumentDBTestsBase
     {
-        [AssemblyInitialize]
-        public static void AssemblyInitialize(TestContext context)
-        {
-            Console.WriteLine("AssemblyInitialize -> DocumentDBServiceTests");
-        }
-
-        [AssemblyCleanup]
-        public static void AssemblyCleanup()
-        {
-            Console.WriteLine("AssemblyCleanup -> DocumentDBServiceTests");
-        }
-    }
-
-    [TestClass()]
-    public class DocumentDBServiceTests: DocumentDBTestsBase
-    {
-        [TestMethod]
-        public void DocumentDBServiceTests1111()
-        {
-            Assert.Fail();
-        }
+        // todo
     }
 }

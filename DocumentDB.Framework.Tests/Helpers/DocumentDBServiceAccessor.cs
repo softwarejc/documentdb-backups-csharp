@@ -1,4 +1,5 @@
-﻿using DocumentDB.Framework.Backups;
+﻿using DocumentDB.Framework.Collections;
+using DocumentDB.Framework.History;
 
 using Microsoft.Azure.Documents;
 
@@ -6,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace DocumentDB.Framework.Tests.Helpers
 {
-    internal class Item : Document
+    public class Item : Document
     {
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
@@ -19,15 +20,19 @@ namespace DocumentDB.Framework.Tests.Helpers
         {
         }
 
-        public IBackupService GetBackupService()
+        public ICollectionService<Item> SampleData { get; set; }
+
+        public IBackupService GetBackupService(int sampleDocumentsToCreateInCollectionSource = 1)
         {
-            var collection = CreateCollectionService<Item>("unitTestsCollection").Result;
+            SampleData = CreateCollectionService<Item>("unitTestsCollection").Result;
 
-            // Add a document to create backups from it
-            collection.CreateDocument(new Item { Name = "ImportantData_1" });
-            collection.CreateDocument(new Item { Name = "ImportantData_2" });
+            for (var i = 0; i < sampleDocumentsToCreateInCollectionSource; i++)
+            {
+                // Add a document to create backups from it
+                SampleData.CreateDocument(new Item { Name = "ImportantData_" + i });
+            }
 
-            return CreateCollectionBackupService(collection);
+            return CreateCollectionBackupService(SampleData);
         }
     }
 }

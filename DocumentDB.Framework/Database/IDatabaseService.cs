@@ -11,6 +11,16 @@ namespace DocumentDB.Framework.Database
     public interface IDatabaseService
     {
         /// <summary>
+        ///     Gets the database URI.
+        /// </summary>
+        Uri DatabaseUri { get; }
+
+        /// <summary>
+        ///     Gets the database.
+        /// </summary>
+        Microsoft.Azure.Documents.Database Database { get; }
+
+        /// <summary>
         ///     Deletes the service database.
         /// </summary>
         Task DeleteDatabase();
@@ -40,15 +50,5 @@ namespace DocumentDB.Framework.Database
         /// <param name="collection">The collection.</param>
         /// <param name="permission">The permission.</param>
         Task<Permission> CreateUserPermission(User user, DocumentCollection collection, PermissionMode permission);
-
-        /// <summary>
-        /// Gets the database URI.
-        /// </summary>
-        Uri DatabaseUri { get; }
-
-        /// <summary>
-        /// Gets the database.
-        /// </summary>
-        Microsoft.Azure.Documents.Database Database { get; }
     }
 }

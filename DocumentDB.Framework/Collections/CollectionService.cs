@@ -66,7 +66,8 @@ namespace DocumentDB.Framework.Collections
         /// </summary>
         public async Task<T> CreateDocument(T item)
         {
-            return await Client?.CreateDocumentAsync(Collection.SelfLink, item) as T;
+            var response = await Client.CreateDocumentAsync(Collection.SelfLink, item);
+            return response.Resource as T;
         }
 
         /// <summary>
@@ -75,16 +76,20 @@ namespace DocumentDB.Framework.Collections
         /// <param name="id">The document identifier.</param>
         public T GetDocumentById(string id)
         {
-            return
-                Client?.CreateDocumentQuery<T>(Collection.DocumentsLink)
-                    .Where(d => d.Id == id)
-                    .AsEnumerable()
-                    .SingleOrDefault();
+            return Client?.CreateDocumentQuery<T>(Collection.DocumentsLink).Where(d => d.Id == id).AsEnumerable().SingleOrDefault();
         }
 
+        /// <summary>
+        ///     Gets the document by link.
+        /// </summary>
+        /// <param name="documentLink">The document link.</param>
         public async Task<T> GetDocumentByLink(string documentLink)
         {
-            return await Client?.ReadDocumentAsync(documentLink) as T;
+            var response = await Client.ReadDocumentAsync(documentLink);
+
+            T document = (dynamic)response.Resource;
+
+            return document;
         }
 
         /// <summary>
@@ -106,7 +111,8 @@ namespace DocumentDB.Framework.Collections
                 throw new InvalidOperationException("Item not found");
             }
 
-            return await Client?.ReplaceDocumentAsync(doc.SelfLink, item) as T;
+            var response = await Client.ReplaceDocumentAsync(doc.SelfLink, item);
+            return response.Resource as T;
         }
 
         /// <summary>
@@ -119,7 +125,7 @@ namespace DocumentDB.Framework.Collections
                 throw new ArgumentNullException(nameof(documentLink));
             }
 
-            await Client?.DeleteDocumentAsync(documentLink);
+            await Client.DeleteDocumentAsync(documentLink);
         }
     }
 }

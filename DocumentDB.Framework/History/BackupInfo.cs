@@ -1,6 +1,6 @@
 using System;
 
-namespace DocumentDB.Framework.Backups
+namespace DocumentDB.Framework.History
 {
     /// <summary>
     /// </summary>
@@ -9,32 +9,24 @@ namespace DocumentDB.Framework.Backups
         /// <summary>
         ///     Initializes a new instance of the <see cref="BackupInfo" /> class.
         /// </summary>
-        public BackupInfo(string id, string selfLink, string description, DateTime timestamp)
-        {
-            Id = id;
-            SelfLink = selfLink;
-            Description = description;
-            Timestamp = timestamp;
-        }
-
         /// <summary>
         ///     Gets the identifier.
         /// </summary>
-        public string Id { get; }
+        public string Id { get; set; }
 
         /// <summary>
         ///     Gets the self link.
         /// </summary>
-        public string SelfLink { get; }
+        public string SelfLink { get; set; }
 
         /// <summary>
         ///     Gets the backup description.
         /// </summary>
-        public string Description { get; }
+        public string Description { get; set; }
 
         /// <summary>
         ///     Gets the backup creation date.
         /// </summary>
-        public DateTime Timestamp { get; }
+        public DateTime Timestamp { get; set; }
     }
 }

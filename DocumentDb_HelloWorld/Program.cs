@@ -16,10 +16,8 @@ namespace DocumentDb_HelloWorld
                     Console.ReadLine();
 
                     // Create some items
-                    foodService.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Skimmed milk" })
-                        .Wait();
-                    foodService.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Whole milk" })
-                        .Wait();
+                    foodService.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Skimmed milk" }).Wait();
+                    foodService.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Whole milk" }).Wait();
                     foodService.ShoppingList.CreateDocument(new Item { Name = "Water", Description = "Mineral" }).Wait();
 
                     // Find all items with name = milk

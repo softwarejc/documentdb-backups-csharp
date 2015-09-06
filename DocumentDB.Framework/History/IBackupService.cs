@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DocumentDB.Framework.Backups
+namespace DocumentDB.Framework.History
 {
     public interface IBackupService
     {

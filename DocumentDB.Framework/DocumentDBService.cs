@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
 
-using DocumentDB.Framework.Backups;
 using DocumentDB.Framework.Collections;
 using DocumentDB.Framework.Database;
+using DocumentDB.Framework.History;
 
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
@@ -57,7 +57,7 @@ namespace DocumentDB.Framework
         {
             // Get or Create Backup collection
             var backupCollectionService = CreateCollectionService<Backup>(collectionSource.Collection.Id + "_backup").Result;
-            return new BackupService((ICollectionService<Document>)collectionSource, backupCollectionService);
+            return new BackupService<T>(collectionSource, backupCollectionService);
         }
     }
 }

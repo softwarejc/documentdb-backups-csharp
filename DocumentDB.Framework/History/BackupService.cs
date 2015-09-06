@@ -6,20 +6,22 @@ using System.Threading.Tasks;
 using DocumentDB.Framework.Collections;
 
 using Microsoft.Azure.Documents;
-using Microsoft.Azure.Documents.Client;
 
-namespace DocumentDB.Framework.Backups
+namespace DocumentDB.Framework.History
 {
-    public class BackupService : IBackupService
+    public class BackupService<T> : IBackupService
+        where T : Document
     {
         private readonly ICollectionService<Backup> _backupService;
 
-        private readonly ICollectionService<Document> _sourceService;
+        private readonly ICollectionService<T> _sourceService;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BackupService" /> class.
+        ///     Initializes a new instance of the <see cref="BackupService{T}" /> class.
         /// </summary>
-        public BackupService(ICollectionService<Document> sourceService, ICollectionService<Backup> backupService)
+        /// <param name="sourceService">The source service.</param>
+        /// <param name="backupService">The backup service.</param>
+        public BackupService(ICollectionService<T> sourceService, ICollectionService<Backup> backupService)
         {
             if (sourceService == null)
             {
@@ -40,10 +42,10 @@ namespace DocumentDB.Framework.Backups
         public async Task<Backup> CreateBackup(string description)
         {
             // Get documents to backup
-            var backupContent = _sourceService.AllDocuments;
+            var backupContent = _sourceService.AllDocuments.Cast<Document>().ToList();
 
             // Create backup
-            var backup = new Backup { Description = description, Content = backupContent.ToList() };
+            var backup = new Backup { Description = description, Content = backupContent };
 
             return await _backupService.CreateDocument(backup);
         }
@@ -61,17 +63,19 @@ namespace DocumentDB.Framework.Backups
         /// </summary>
         public async Task RestoreBackup(Backup backup)
         {
-            var collectionId = _sourceService.Collection.Id;
-
-            // DocumentDB does not support bulk delete yet, as this service only does documents backup
-            // delete the collection and create a new one with the backup content
-            await _sourceService.DatabaseService.DeleteCollection(_sourceService.Collection);
-
-            // Create new collection
-            await _sourceService.DatabaseService.ReadOrCreateCollection(collectionId);
+            // DocumentDB does not support bulk delete yet, delete 1 by 1
+            foreach (var document in _sourceService.AllDocuments)
+            {
+                await _sourceService.DeleteDocument(document.SelfLink);
+            }
 
             // Add backed-up documents to the collection
-            backup.Content.ForEach(async document => await _sourceService.CreateDocument(document));
+            foreach (var document in backup.Content)
+            {
+                T typedDocument = (dynamic)document;
+
+                await _sourceService.CreateDocument(typedDocument);
+            }
         }
 
         /// <summary>
@@ -88,11 +92,12 @@ namespace DocumentDB.Framework.Backups
         /// </summary>
         public IEnumerable<BackupInfo> GetAvailableBackups()
         {
-            // Link to backup documents
             return
                 _backupService.Client.CreateDocumentQuery<Backup>(_backupService.CollectionUri)
-                    .Select(backup => new BackupInfo(backup.Id, backup.SelfLink, backup.Description, backup.Timestamp))
-                    .AsEnumerable();
+                    .AsEnumerable()
+                    .Select(
+                        backup =>
+                        new BackupInfo { Id = backup.Id, SelfLink = backup.SelfLink, Description = backup.Description, Timestamp = backup.Timestamp });
         }
     }
 }

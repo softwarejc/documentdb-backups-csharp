@@ -1,8 +1,8 @@
 ﻿using System.Configuration;
 
 using DocumentDB.Framework;
-using DocumentDB.Framework.Backups;
 using DocumentDB.Framework.Collections;
+using DocumentDB.Framework.History;
 
 namespace DocumentDb_HelloWorld.Domain
 {

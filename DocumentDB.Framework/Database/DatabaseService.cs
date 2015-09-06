@@ -8,7 +8,7 @@ using Microsoft.Azure.Documents.Linq;
 
 namespace DocumentDB.Framework.Database
 {
-    internal class DatabaseService : IDatabaseService
+    public class DatabaseService : IDatabaseService
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="DatabaseService" /> class.
@@ -31,7 +31,6 @@ namespace DocumentDB.Framework.Database
         /// </summary>
         public Microsoft.Azure.Documents.Database Database { get; }
 
-
         /// <summary>
         ///     Deletes the service database.
         /// </summary>
@@ -48,19 +47,12 @@ namespace DocumentDB.Framework.Database
         public async Task<DocumentCollection> ReadOrCreateCollection(string collectionId)
         {
             var collection =
-                Client.CreateDocumentCollectionQuery(Database.SelfLink)
-                    .Where(c => c.Id.Equals(collectionId))
-                    .AsEnumerable()
-                    .FirstOrDefault();
+                Client.CreateDocumentCollectionQuery(Database.SelfLink).Where(c => c.Id.Equals(collectionId)).AsEnumerable().FirstOrDefault();
 
             if (collection == null)
             {
                 // Collection not found, create it
-                collection =
-                    await
-                    Client.CreateDocumentCollectionAsync(
-                        Database.SelfLink,
-                        new DocumentCollection { Id = collectionId });
+                collection = await Client.CreateDocumentCollectionAsync(Database.SelfLink, new DocumentCollection { Id = collectionId });
             }
             return collection;
         }
@@ -92,36 +84,27 @@ namespace DocumentDB.Framework.Database
         /// <summary>
         ///     Creates a permission with an access token for the specified user and the specified collection
         /// </summary>
-        public async Task<Permission> CreateUserPermission(
-            User user,
-            DocumentCollection collection,
-            PermissionMode permission)
+        public async Task<Permission> CreateUserPermission(User user, DocumentCollection collection, PermissionMode permission)
         {
             var permissionId = permission + collection.Id;
 
             // The permission may already exists on database, try to find it
             var collectionPermission =
-                Client.CreatePermissionQuery(
-                    "/dbs/" + Database.ResourceId + "/users/" + user.ResourceId + "/permissions")
+                Client.CreatePermissionQuery("/dbs/" + Database.ResourceId + "/users/" + user.ResourceId + "/permissions")
                     .AsEnumerable()
                     .FirstOrDefault(u => u.Id == permissionId);
 
             // If permission not found, create a new one
             if (collectionPermission == null)
             {
-                collectionPermission = new Permission
-                                           {
-                                               PermissionMode = permission,
-                                               ResourceLink = collection.SelfLink,
-                                               Id = permissionId
-                                           };
+                collectionPermission = new Permission { PermissionMode = permission, ResourceLink = collection.SelfLink, Id = permissionId };
             }
 
             return await Client.CreatePermissionAsync(user.SelfLink, collectionPermission);
         }
 
         /// <summary>
-        /// Gets the database URI.
+        ///     Gets the database URI.
         /// </summary>
         public Uri DatabaseUri => UriFactory.CreateDatabaseUri(Database.Id);
 
@@ -130,15 +113,28 @@ namespace DocumentDB.Framework.Database
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="databaseId">The database identifier.</param>
-        public static async Task<Microsoft.Azure.Documents.Database> ReadOrCreateDatabase(
-            DocumentClient client,
-            string databaseId)
+        public static async Task<Microsoft.Azure.Documents.Database> ReadOrCreateDatabase(DocumentClient client, string databaseId)
         {
             // Get the database
             var db = client.CreateDatabaseQuery().Where(d => d.Id == databaseId).AsEnumerable().FirstOrDefault();
 
             // Return the database or create it if not exists yet
             return db ?? await client.CreateDatabaseAsync(new Microsoft.Azure.Documents.Database { Id = databaseId });
+        }
+
+        /// <summary>
+        ///     Deletes the service database.
+        /// </summary>
+        public static async Task DeleteDatabase(DocumentClient client, string databaseId)
+        {
+            // Get the database
+            var db = client.CreateDatabaseQuery().Where(d => d.Id == databaseId).AsEnumerable().FirstOrDefault();
+
+            // Return the database or create it if not exists yet
+            if (db != null)
+            {
+                await client.DeleteDatabaseAsync(db.SelfLink);
+            }
         }
     }
 }
