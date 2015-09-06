@@ -48,14 +48,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Backup\BackupInfo.cs" />
+    <Compile Include="History\BackupInfo.cs" />
     <Compile Include="Collections\CollectionService.cs" />
     <Compile Include="DocumentDBService.cs" />
     <Compile Include="Database\DatabaseService.cs" />
     <Compile Include="Helpers\EpochDateTimeEx.cs" />
-    <Compile Include="Backup\Backup.cs" />
-    <Compile Include="Backup\BackupService.cs" />
-    <Compile Include="Backup\IBackupService.cs" />
+    <Compile Include="History\Backup.cs" />
+    <Compile Include="History\BackupService.cs" />
+    <Compile Include="History\IBackupService.cs" />
     <Compile Include="Database\IDatabaseService.cs" />
     <Compile Include="Collections\ICollectionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
