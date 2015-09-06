@@ -60,7 +60,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="BackupServiceTests.cs" />
+    <Compile Include="B\BackupServiceTests.cs" />
     <Compile Include="Helpers\DocumentDBServiceAccessor.cs" />
     <Compile Include="DocumentDBServiceTests.cs" />
     <Compile Include="Helpers\UnitTestsConfig.cs" />
