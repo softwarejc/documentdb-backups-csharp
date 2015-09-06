@@ -60,7 +60,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Backups\BackupServiceTests.cs" />
+    <Compile Include="BackupServiceTests.cs" />
     <Compile Include="Helpers\DocumentDBServiceAccessor.cs" />
     <Compile Include="DocumentDBServiceTests.cs" />
     <Compile Include="Helpers\UnitTestsConfig.cs" />
@@ -74,6 +74,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Backups\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
