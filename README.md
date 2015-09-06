@@ -78,3 +78,6 @@ using (var foodService = new FoodService())
 
 #### Class diagram
 ![alt tag](https://cloud.githubusercontent.com/assets/9339027/9705124/71f3036a-54ba-11e5-959a-4683916ccefe.png)
+
+
+Read more on my blog: [http://softwarejuancarlos.com](http://softwarejuancarlos.com)  
