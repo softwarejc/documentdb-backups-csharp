@@ -16,8 +16,10 @@ namespace DocumentDb_HelloWorld
                     Console.ReadLine();
 
                     // Create some items
-                    foodService.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Skimmed milk" }).Wait();
-                    foodService.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Whole milk" }).Wait();
+                    foodService.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Skimmed milk" })
+                        .Wait();
+                    foodService.ShoppingList.CreateDocument(new Item { Name = "Milk", Description = "Whole milk" })
+                        .Wait();
                     foodService.ShoppingList.CreateDocument(new Item { Name = "Water", Description = "Mineral" }).Wait();
 
                     // Find all items with name = milk
@@ -40,7 +42,7 @@ namespace DocumentDb_HelloWorld
                     }
 
                     // Delete database
-                    foodService.DatabaseService.DeleteDatabase().Wait();
+                    foodService.ShoppingList.DatabaseService.DeleteDatabase().Wait();
                 }
             }
             catch (Exception e)

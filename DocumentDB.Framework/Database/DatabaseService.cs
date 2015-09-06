@@ -1,13 +1,12 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-
-using DocumentDB.Framework.Interfaces;
 
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 
-namespace DocumentDB.Framework
+namespace DocumentDB.Framework.Database
 {
     internal class DatabaseService : IDatabaseService
     {
@@ -30,7 +29,8 @@ namespace DocumentDB.Framework
         /// <summary>
         ///     Gets the database associated to this service.
         /// </summary>
-        public Database Database { get; }
+        public Microsoft.Azure.Documents.Database Database { get; }
+
 
         /// <summary>
         ///     Deletes the service database.
@@ -83,7 +83,7 @@ namespace DocumentDB.Framework
             // If user does not exists, create it
             if (user == null)
             {
-                await Client.CreateUserAsync(Database.SelfLink, new User { Id = userId });
+                await Client.CreateUserAsync(DatabaseUri, new User { Id = userId });
             }
 
             return user;
@@ -121,17 +121,24 @@ namespace DocumentDB.Framework
         }
 
         /// <summary>
+        /// Gets the database URI.
+        /// </summary>
+        public Uri DatabaseUri => UriFactory.CreateDatabaseUri(Database.Id);
+
+        /// <summary>
         ///     Reads or create a database.
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="databaseId">The database identifier.</param>
-        public static async Task<Database> ReadOrCreateDatabase(DocumentClient client, string databaseId)
+        public static async Task<Microsoft.Azure.Documents.Database> ReadOrCreateDatabase(
+            DocumentClient client,
+            string databaseId)
         {
             // Get the database
             var db = client.CreateDatabaseQuery().Where(d => d.Id == databaseId).AsEnumerable().FirstOrDefault();
 
             // Return the database or create it if not exists yet
-            return db ?? await client.CreateDatabaseAsync(new Database { Id = databaseId });
+            return db ?? await client.CreateDatabaseAsync(new Microsoft.Azure.Documents.Database { Id = databaseId });
         }
     }
 }

@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 using Microsoft.Azure.Documents;
 
-namespace DocumentDB.Framework.Interfaces
+namespace DocumentDB.Framework.Database
 {
     /// <summary>
     ///     Service to perform DocumentDB actions.
@@ -39,5 +40,15 @@ namespace DocumentDB.Framework.Interfaces
         /// <param name="collection">The collection.</param>
         /// <param name="permission">The permission.</param>
         Task<Permission> CreateUserPermission(User user, DocumentCollection collection, PermissionMode permission);
+
+        /// <summary>
+        /// Gets the database URI.
+        /// </summary>
+        Uri DatabaseUri { get; }
+
+        /// <summary>
+        /// Gets the database.
+        /// </summary>
+        Microsoft.Azure.Documents.Database Database { get; }
     }
 }

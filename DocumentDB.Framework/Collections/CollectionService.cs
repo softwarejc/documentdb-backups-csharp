@@ -4,40 +4,49 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-using DocumentDB.Framework.Interfaces;
+using DocumentDB.Framework.Database;
 
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 
-namespace DocumentDB.Framework
+namespace DocumentDB.Framework.Collections
 {
     internal class CollectionService<T> : ICollectionService<T>
         where T : Document
     {
-        private readonly DocumentClient _client;
-
         /// <summary>
         ///     Creates a documentDb repository to perform documents operations against one collection.
         /// </summary>
         /// <param name="client">Document db client</param>
         /// <param name="collection">The collection.</param>
-        public CollectionService(DocumentClient client, DocumentCollection collection)
+        /// <param name="databaseService">The database service.</param>
+        public CollectionService(DocumentClient client, DocumentCollection collection, DatabaseService databaseService)
         {
             if (client == null)
             {
                 throw new ArgumentNullException(nameof(client));
             }
 
-            _client = client;
-
+            Client = client;
             Collection = collection;
+            DatabaseService = databaseService;
         }
+
+        /// <summary>
+        ///     Gets the documentDB client.
+        /// </summary>
+        public DocumentClient Client { get; }
 
         /// <summary>
         ///     Gets the DocumentDB collection
         /// </summary>
         public DocumentCollection Collection { get; }
+
+        /// <summary>
+        ///     Gets the database service.
+        /// </summary>
+        public IDatabaseService DatabaseService { get; }
 
         /// <summary>
         ///     Gets all documents.
@@ -50,25 +59,32 @@ namespace DocumentDB.Framework
             }
         }
 
+        public Uri CollectionUri => UriFactory.CreateCollectionUri(DatabaseService.Database.Id, Collection.Id);
+
         /// <summary>
         ///     Creates a document.
         /// </summary>
         public async Task<T> CreateDocument(T item)
         {
-            return await _client?.CreateDocumentAsync(Collection.SelfLink, item) as T;
+            return await Client?.CreateDocumentAsync(Collection.SelfLink, item) as T;
         }
 
         /// <summary>
         ///     Gets a document.
         /// </summary>
         /// <param name="id">The document identifier.</param>
-        public T GetDocument(string id)
+        public T GetDocumentById(string id)
         {
             return
-                _client?.CreateDocumentQuery<T>(Collection.DocumentsLink)
+                Client?.CreateDocumentQuery<T>(Collection.DocumentsLink)
                     .Where(d => d.Id == id)
                     .AsEnumerable()
                     .SingleOrDefault();
+        }
+
+        public async Task<T> GetDocumentByLink(string documentLink)
+        {
+            return await Client?.ReadDocumentAsync(documentLink) as T;
         }
 
         /// <summary>
@@ -76,7 +92,7 @@ namespace DocumentDB.Framework
         /// </summary>
         public IEnumerable<T> Where(Expression<Func<T, bool>> predicate)
         {
-            return _client?.CreateDocumentQuery<T>(Collection.DocumentsLink).Where(predicate).AsEnumerable();
+            return Client?.CreateDocumentQuery<T>(Collection.DocumentsLink).Where(predicate).AsEnumerable();
         }
 
         /// <summary>
@@ -84,13 +100,13 @@ namespace DocumentDB.Framework
         /// </summary>
         public async Task<T> ReplaceDocument(string id, T item)
         {
-            var doc = GetDocument(id);
+            var doc = GetDocumentById(id);
             if (doc == null)
             {
                 throw new InvalidOperationException("Item not found");
             }
 
-            return await _client?.ReplaceDocumentAsync(doc.SelfLink, item) as T;
+            return await Client?.ReplaceDocumentAsync(doc.SelfLink, item) as T;
         }
 
         /// <summary>
@@ -103,7 +119,7 @@ namespace DocumentDB.Framework
                 throw new ArgumentNullException(nameof(documentLink));
             }
 
-            await _client?.DeleteDocumentAsync(documentLink);
+            await Client?.DeleteDocumentAsync(documentLink);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace DocumentDB.Framework.Helpers
         /// <summary>
         ///     Convert an amount of seconds elapsed since January 1, 1970 (midnight UTC/GMT) to DateTime
         /// </summary>
-        public static DateTime FromEpochDateTime(this int epochDateTime)
+        public static DateTime ToDateTime(this int epochDateTime)
         {
             return new DateTime(1970, 1, 1).AddSeconds(epochDateTime);
         }
