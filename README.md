@@ -12,7 +12,26 @@ The implementation is very simple and will only backup the documents. A complete
 - http://feedback.azure.com/forums/263030-documentdb
 
 Example:
+Service definition:
+```csharp
+    public class FoodService : DocumentDBService
+    {
+        public FoodService()
+            : base(endPointUrl, authorizationKey, database)
+        {
+            // Create collection service
+            ShoppingList = CreateCollectionService<Item>("ShoppingListCollection").Result;
 
+            // Create a backup service for the shopping list collection
+            BackupService = CreateCollectionBackupService(ShoppingList);
+        }
+
+        public ICollectionService<Item> ShoppingList { get; }
+        public IBackupService BackupService { get; }
+    }
+```
+
+Create and restore backups:
 ```csharp
 using (var foodService = new FoodService())
 {
