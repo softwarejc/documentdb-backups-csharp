@@ -75,3 +75,6 @@ using (var foodService = new FoodService())
     foodService.ShoppingList.DatabaseService.DeleteDatabase().Wait();
 }
  ```
+
+#### Class diagram
+![alt tag](https://cloud.githubusercontent.com/assets/9339027/9705124/71f3036a-54ba-11e5-959a-4683916ccefe.png)
