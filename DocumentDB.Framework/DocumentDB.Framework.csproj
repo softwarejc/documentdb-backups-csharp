@@ -48,14 +48,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Backups\BackupInfo.cs" />
+    <Compile Include="BackupInfo.cs" />
     <Compile Include="Collections\CollectionService.cs" />
     <Compile Include="DocumentDBService.cs" />
     <Compile Include="Database\DatabaseService.cs" />
     <Compile Include="Helpers\EpochDateTimeEx.cs" />
-    <Compile Include="Backups\Backup.cs" />
-    <Compile Include="Backups\BackupService.cs" />
-    <Compile Include="Backups\IBackupService.cs" />
+    <Compile Include="Backup.cs" />
+    <Compile Include="BackupService.cs" />
+    <Compile Include="IBackupService.cs" />
     <Compile Include="Database\IDatabaseService.cs" />
     <Compile Include="Collections\ICollectionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,7 +63,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Backups\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
