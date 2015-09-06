@@ -11,8 +11,7 @@ The framework also has a DocumentDB history backup solution. The backups will be
 The implementation is very simple and will only backup the documents. A complete Microsoft backup solution is already planned.
 - http://feedback.azure.com/forums/263030-documentdb
 
-Example:
-Service definition:
+####Service definition:
 ```csharp
     public class FoodService : DocumentDBService
     {
@@ -31,7 +30,7 @@ Service definition:
     }
 ```
 
-Create and restore backups:
+####Create and restore backups:
 ```csharp
 using (var foodService = new FoodService())
 {
